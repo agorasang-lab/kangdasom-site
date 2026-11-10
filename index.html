@@ -11,12 +11,16 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>document.documentElement.className="js"</script>
 <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="v3.css">
 </head>
 <body>
+<div class="loader" aria-hidden="true"><span class="lname">강다솜</span><span class="count">0</span></div>
+<div class="cursor" aria-hidden="true"><i></i></div>
+<img class="peek" alt="" aria-hidden="true">
 <div class="progress" aria-hidden="true"></div>
 
 <header class="top">
-  <a href="#hero" class="mark">강다솜</a>
+  <a href="#hero" class="mark"><svg class="logo" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><circle cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 23C9 11 23 11 23 23" fill="none" stroke="#2F3DE0" stroke-width="2.4" stroke-linecap="round"/><circle cx="16" cy="8.5" r="2" fill="#2F3DE0"/></svg><span>강다솜</span></a>
   <nav aria-label="주 메뉴">
     <a href="#stage">무대</a>
     <a href="#direction">안무와 연출</a>
@@ -30,6 +34,7 @@
 <main>
 
 <section class="hero" id="hero">
+  <div class="trail" aria-hidden="true"></div>
   <div class="hero-text">
     <p class="en">Kang Dasom</p>
     <h1 aria-label="강다솜"><span>강</span><span>다</span><span>솜</span></h1>
@@ -112,6 +117,7 @@
     <h2>사진</h2>
     <p>옆으로 밀어서 보세요. 사진 더 보기 <a href="https://www.instagram.com/sombong_photo/" target="_blank" rel="noopener">@sombong_photo</a></p>
   </div>
+  <div class="rail-box">
   <div class="rail" tabindex="0" aria-label="사진 모음, 좌우로 스크롤">
     <img class="rv" src="images/photo1.jpg" alt="바위 위에 앉은 강다솜">
     <img class="rv" src="images/stage1.jpg" alt="안개 낀 무대 위 무용수들" style="aspect-ratio:3/4">
@@ -120,6 +126,7 @@
     <img class="rv" src="images/photo3.jpg" alt="바다에서 몸을 뒤로 젖힌 강다솜">
     <img class="rv" src="images/hero_bw.jpg" alt="강다솜 흑백 인물 사진">
     <img class="rv" src="images/photo4.jpg" alt="어두운 배경의 인물 사진">
+  </div>
   </div>
 </section>
 

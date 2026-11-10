@@ -1,0 +1,49 @@
+/* v3: entrance, cursor, photo trail, list preview, tilt, widening tiles */
+.mark{display:flex;align-items:center;gap:9px}
+.logo{flex:none}
+
+/* entrance: count up, then the curtain lifts */
+.loader{position:fixed;inset:0;z-index:100;background:var(--ink);color:var(--floor);display:flex;align-items:flex-end;justify-content:space-between;padding:var(--pad);transition:transform .9s cubic-bezier(.7,0,.2,1);animation:loaderFail 0s 6s forwards}
+.loader.done{transform:translateY(-100%)}
+.loader .lname{font-weight:200;font-size:clamp(24px,4vw,56px);letter-spacing:-.02em}
+.loader .count{font-weight:100;font-size:clamp(72px,16vw,220px);line-height:.9;letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+@keyframes loaderFail{to{visibility:hidden}}
+html.js:not(.ready) .hero h1 span{animation:none}
+
+/* hero: photo trail behind the name, tilt on the portrait */
+.hero{position:relative;overflow:hidden}
+.trail{position:absolute;inset:0;z-index:0;pointer-events:none}
+.hero-photo{position:relative;z-index:1;transition:transform .35s ease-out}
+.tr{position:absolute;width:clamp(110px,12vw,170px);aspect-ratio:3/4;object-fit:cover;opacity:0;transform:translate(-50%,-50%) scale(.6) rotate(var(--r));transition:opacity .45s,transform .7s cubic-bezier(.2,.8,.2,1)}
+.tr.on{opacity:.9;transform:translate(-50%,-50%) scale(1) rotate(var(--r))}
+
+/* follower dot and list preview (mouse only) */
+.cursor{position:fixed;top:0;left:0;z-index:90;width:72px;height:72px;margin:-36px 0 0 -36px;pointer-events:none;mix-blend-mode:difference;display:none}
+.cursor i{display:block;width:100%;height:100%;border-radius:50%;background:#fff;transform:scale(.18);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+.cursor.mid i{transform:scale(.4)}
+.cursor.big i{transform:scale(1)}
+.peek{position:fixed;top:0;left:0;z-index:80;width:200px;height:260px;object-fit:cover;pointer-events:none;opacity:0;transition:opacity .25s;display:none}
+.peek.on{opacity:1}
+@media (pointer:fine){.cursor,.peek{display:block}}
+
+/* headings rise letter by letter */
+html.js .ch{display:inline-block;opacity:0;transform:translateY(.6em);transition:opacity .7s,transform .7s cubic-bezier(.2,.8,.2,1)}
+html.js h2.in .ch{opacity:1;transform:none}
+
+/* photo rail edge fades into blur */
+.rail-box{position:relative}
+.rail-box::after{content:"";position:absolute;top:0;right:0;bottom:20px;width:90px;pointer-events:none;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);-webkit-mask-image:linear-gradient(to left,#000 15%,transparent);mask-image:linear-gradient(to left,#000 15%,transparent)}
+
+/* instagram tiles widen on hover (desktop) */
+@media (min-width:821px){
+  .reels{display:flex;gap:10px;height:min(68vh,560px)}
+  .reel{aspect-ratio:auto;flex:1;transition:flex .7s cubic-bezier(.2,.8,.2,1)}
+  .reels:hover .reel{flex:.6}
+  .reels .reel:hover{flex:3}
+}
+@media (prefers-reduced-motion:reduce){
+  .loader{display:none}
+  .tr,.cursor,.peek{display:none!important}
+  html.js .ch{opacity:1;transform:none;transition:none}
+  .hero-photo{transition:none}
+}
