@@ -33,7 +33,7 @@
 <header class="top">
   <a href="#hero" class="mark"><svg class="logo" viewBox="0 0 32 32" width="26" height="26" aria-hidden="true"><circle class="ring" cx="16" cy="16" r="14.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path class="arch" d="M9 23C9 11 23 11 23 23" fill="none" stroke-width="2.4" stroke-linecap="round"/><circle class="head" cx="16" cy="8.5" r="2"/></svg><span>강다솜</span></a>
   <nav class="dnav" aria-label="주 메뉴">
-    <a href="#profile">학력</a>
+    <a href="#profile">프로필</a>
     <a href="#stage">무대</a>
     <a href="#direction">안무와 연출</a>
     <a href="#photos">사진</a>
@@ -45,7 +45,7 @@
 </header>
 
 <nav class="menu" id="menu" aria-label="모바일 메뉴">
-  <a href="#profile" style="--d:0">학력과 자격</a>
+  <a href="#profile" style="--d:0">프로필</a>
   <a href="#stage" style="--d:1">무대</a>
   <a href="#direction" style="--d:2">안무와 연출</a>
   <a href="#photos" style="--d:3">사진</a>
@@ -94,11 +94,13 @@
 <!-- 학력·자격·수상: 화면이 멈춘 채 한 화면씩 바뀐다 -->
 <section class="cred" id="profile" aria-labelledby="cred-title">
   <div class="cred-stick">
-    <div class="cred-head"><h2 id="cred-title">학력과 자격</h2></div>
+    <div class="cred-head"><h2 id="cred-title">프로필</h2></div>
     <div class="tabs">
       <button type="button" aria-controls="p-edu" aria-current="true">학력</button>
       <button type="button" aria-controls="p-cert" aria-current="false">자격</button>
       <button type="button" aria-controls="p-award" aria-current="false">수상</button>
+      <button type="button" aria-controls="p-core" aria-current="false">핵심능력</button>
+      <button type="button" aria-controls="p-career" aria-current="false">주요약력</button>
     </div>
     <div class="panels">
       <div class="panel on" id="p-edu">
@@ -125,6 +127,28 @@
           <li style="--k:0">제34회 전국대학무용콩쿠르 <em>전체 2위 은상</em></li>
           <li style="--k:1">동아무용콩쿠르 일반부 <em>본선 4위</em></li>
           <li style="--k:2">문예총 장관상 국제 콩쿠르 <em>은상</em></li>
+        </ul>
+      </div>
+      <div class="panel dense prog scramble" id="p-core" data-w="2">
+        <span class="ghost long" aria-hidden="true">핵심능력</span>
+        <h3 class="ptitle">핵심능력</h3>
+        <ul class="items">
+          <li style="--k:0"><em>Top-tier Performance</em><small>국립현대무용단·엠비규어스 기반의 압도적 무대 장악력</small></li>
+          <li style="--k:1"><em>Wellness Specialist</em><small>무용수의 신체 감각을 요가·필라테스에 녹여낸 전문 코칭</small></li>
+          <li style="--k:2"><em>Creative Directing</em><small>오사카 엑스포 등 대형 프로젝트 안무 및 무용단 총괄 연출</small></li>
+          <li style="--k:3"><em>Versatile Artist</em><small>순수 예술, 광고, 뮤지컬을 넘나드는 폭넓은 미디어 스펙트럼</small></li>
+          <li style="--k:4"><em>Global &amp; Professional</em><small>해외 투어 및 브랜드 협업 전문</small></li>
+        </ul>
+      </div>
+      <div class="panel dense prog timeline" id="p-career" data-w="2">
+        <span class="ghost long" aria-hidden="true">주요약력</span>
+        <h3 class="ptitle">주요약력</h3>
+        <ul class="items">
+          <li style="--k:0"><em>국립현대무용단(KNCDC)</em><small>2026 &lt;더블빌: 항해&amp;핫코&gt; 영국투어 항해 무용수</small></li>
+          <li style="--k:1"><em>엠비규어스 댄스컴퍼니</em><small>(Ambiguous Dance Co.) 피버 무용수</small></li>
+          <li style="--k:2"><em>soo.comm 쑤컴</em><small>무용수 활동 중</small></li>
+          <li style="--k:3"><em>Blackpool Dance 대표</em><small>2018–Present</small></li>
+          <li style="--k:4"><em>국립현대무용단(KNCDC)</em><small>2025 청년단원</small></li>
         </ul>
       </div>
     </div>

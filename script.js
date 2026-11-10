@@ -122,14 +122,33 @@
   var hs = $('.hs'), rail = hs && $('.rail', hs), hsTotal = 0;
   var band = $('.band'), bandImg = band && $('img', band);
   var cred = $('.cred'), cPanels = cred ? $$('.panel', cred) : [], cTabs = cred ? $$('.tabs button', cred) : [], cSeg = 0;
+  // key panels (data-w="2") get twice the scroll length
+  var cW = cPanels.map(function(p){ return parseFloat(p.getAttribute('data-w')) || 1; });
+  var cCum = [0]; cW.forEach(function(w, k){ cCum.push(cCum[k] + w); });
+  var cTotal = cCum[cCum.length - 1];
   if (cred && reduced) cred.classList.add('static');
   cTabs.forEach(function(t, k){
     t.addEventListener('click', function(){
       var top0 = cred.getBoundingClientRect().top + window.scrollY;
       var rng = cred.offsetHeight - window.innerHeight;
-      window.scrollTo({top: top0 + rng * (k / cPanels.length + 0.04) + 1, behavior: reduced ? 'auto' : 'smooth'});
+      var frac = (cCum[k] + cW[k] * (cPanels[k].classList.contains('prog') ? .12 : .05)) / cTotal;
+      window.scrollTo({top: top0 + rng * frac + 1, behavior: reduced ? 'auto' : 'smooth'});
     });
   });
+  // letters settle from random characters into the real title
+  function scramble(el){
+    if (reduced) return;
+    var fin = el.getAttribute('data-t') || el.textContent;
+    el.setAttribute('data-t', fin);
+    var pool = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', t0 = Date.now(), D = 700;
+    clearInterval(el._sc);
+    el._sc = setInterval(function(){
+      var p = Math.min(1, (Date.now() - t0) / D), n = Math.floor(p * fin.length), s = fin.slice(0, n);
+      for (var i = n; i < fin.length; i++) s += /[A-Za-z]/.test(fin[i]) ? pool[Math.random() * pool.length | 0] : fin[i];
+      el.textContent = s;
+      if (p >= 1) { clearInterval(el._sc); el.textContent = fin; }
+    }, 35);
+  }
 
   function sizeHS(){
     if (!hs || !rail) return;
@@ -190,7 +209,21 @@
       var crr = cred.getBoundingClientRect();
       var crng = cred.offsetHeight - vh;
       var cp0 = clamp(-crr.top / Math.max(1, crng), 0, 0.9999);
-      var seg = Math.floor(cp0 * cPanels.length), local = cp0 * cPanels.length - seg;
+      var pos = cp0 * cTotal, seg = 0;
+      while (seg < cPanels.length - 1 && pos >= cCum[seg + 1]) seg++;
+      var local = (pos - cCum[seg]) / cW[seg];
+      // key panels: reveal one item per scroll step, newest lit
+      var pn0 = cPanels[seg];
+      if (pn0.classList.contains('prog')) {
+        var lis = $$('.items li', pn0), shown = Math.min(lis.length, Math.floor(local * lis.length * 1.12) + 1);
+        lis.forEach(function(li, k){
+          var was = li.classList.contains('on');
+          li.classList.toggle('on', k < shown);
+          li.classList.toggle('cur', k === shown - 1);
+          if (!was && k < shown && pn0.classList.contains('scramble')) { var em = $('em', li); if (em) scramble(em); }
+        });
+        pn0.style.setProperty('--lp', (shown / lis.length).toFixed(3));
+      }
       if (seg !== cSeg) {
         cPanels.forEach(function(pn, k){ pn.classList.toggle('on', k === seg); });
         cTabs.forEach(function(t, k){ t.setAttribute('aria-current', String(k === seg)); });

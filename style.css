@@ -111,7 +111,7 @@ html.js:not(.ready) h1 span{animation:none}
 .w.on{opacity:1}
 
 /* ---------- education, certificates, awards: pinned, one screen each ---------- */
-.cred{position:relative;height:330vh;background:var(--ink);color:var(--floor);border-top:1px solid #2a2e47}
+.cred{position:relative;height:700vh;background:var(--ink);color:var(--floor);border-top:1px solid #2a2e47}
 .cred-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;padding:calc(var(--bar) + 26px) var(--pad) calc(28px + var(--safe-b))}
 .cred-head h2{color:#fff;font-weight:600}
 .tabs{display:flex;gap:10px;margin-top:16px}
@@ -131,6 +131,35 @@ html.js:not(.ready) h1 span{animation:none}
 .items em{font-style:normal;font-weight:600;color:var(--tape-lt)}
 .items small{display:block;margin-top:2px;font-size:15px;color:var(--haze)}
 .panel.on .ptitle,.panel.on .items li{opacity:1;transform:none}
+.tabs{gap:6px}
+.tabs button{font-size:14px}
+.ghost.long{font-size:clamp(110px,34vw,320px);-webkit-text-stroke-color:rgba(142,152,255,.2)}
+.panel.dense .items li{padding:11px 0;font-size:clamp(17px,4.6vw,24px)}
+.panel.dense .items small{font-size:14px}
+/* key panels: items arrive one per scroll step; the newest is lit, earlier ones dim */
+.panel.on.prog .items li{opacity:0;transform:translateY(26px);transition-delay:0s}
+.panel.on.prog .items li.on{opacity:.62;transform:none}
+.panel.on.prog .items li.cur{opacity:1}
+.panel.prog .items li.cur em{color:#fff}
+.panel.prog .items li.cur small{color:var(--floor)}
+/* career: a timeline draws down as items arrive */
+.panel.timeline .items{padding-left:24px}
+.panel.timeline .items::before,.panel.timeline .items::after{content:"";position:absolute;left:4px;top:0;bottom:0;width:1px}
+.panel.timeline .items::before{background:rgba(255,255,255,.18)}
+.panel.timeline .items::after{background:var(--tape-lt);transform-origin:50% 0;transform:scaleY(var(--lp,0));transition:transform .5s cubic-bezier(.2,.8,.2,1)}
+.panel.timeline .items li{position:relative}
+.panel.timeline .items li::before{content:"";position:absolute;left:-24px;top:20px;width:9px;height:9px;border-radius:50%;border:1px solid var(--tape-lt);background:var(--ink);transition:background .3s,transform .3s}
+.panel.timeline .items li.on::before{background:var(--tape-lt)}
+.panel.timeline .items li.cur::before{transform:scale(1.5)}
+@media (max-width:820px){
+  .panel.dense{justify-content:flex-start;padding-top:10px}
+  .panel.dense .ptitle{display:none}
+  .panel.dense .items{margin-top:0}
+}
+html.no-js .panel.dense .ptitle,.cred.static .panel.dense .ptitle{display:block}
+html.no-js .panel.prog .items li,.cred.static .panel.prog .items li{opacity:1;transform:none}
+html.no-js .panel.timeline .items::after,.cred.static .panel.timeline .items::after{transform:none}
+html.no-js .panel.timeline .items li::before,.cred.static .panel.timeline .items li::before{background:var(--tape-lt)}
 /* no script or reduced motion: show all three, stacked */
 html.no-js .cred,.cred.static{height:auto}
 html.no-js .cred-stick,.cred.static .cred-stick{position:static;height:auto;padding-bottom:64px}
@@ -266,7 +295,8 @@ blockquote cite{display:block;margin-top:8px;color:var(--dim);font-style:normal;
   .xp-photo{clip-path:inset(14vh 32vw 30vh 32vw)}
   .sec{padding-top:104px}
   .cred-stick{padding-top:calc(var(--bar) + 40px)}
-  .tabs{max-width:640px}
+  .tabs{max-width:760px;gap:10px}
+  .tabs button{font-size:16px}
   .panel{display:grid;grid-template-columns:4fr 8fr;align-items:center;gap:var(--pad)}
   .items{margin-top:0}
   .card{grid-template-columns:3fr 9fr;gap:var(--pad);padding:36px var(--pad) 40px;top:calc(var(--bar) + var(--i) * 14px)}
