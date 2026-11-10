@@ -3,8 +3,9 @@
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(pointer: fine)').matches && !reduced;
   var PHOTOS = ['images/photo1.jpg','images/stage2.jpg','images/photo2.jpg','images/stage1.jpg','images/photo3.jpg','images/hero_bw.jpg','images/photo4.jpg'];
+  function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
 
-  /* ---------- entrance ---------- */
+  /* ---------- entrance: count up, curtain lifts ---------- */
   var pending = [];
   function ready(){
     if (root.classList.contains('ready')) return;
@@ -33,8 +34,8 @@
     setTimeout(function(){ ready(); if (loader.parentNode) loader.remove(); }, 4500); // failsafe
   }
 
-  /* ---------- reveals: photos open once, headings rise ---------- */
-  document.querySelectorAll('.block .head h2, .rail-head h2, .contact h2').forEach(function(h){
+  /* ---------- headings rise letter by letter ---------- */
+  document.querySelectorAll('.sec-head h2, .block .head h2, .rail-head h2, .contact h2').forEach(function(h){
     if (reduced) return;
     var txt = h.textContent; h.setAttribute('aria-label', txt); h.textContent = '';
     Array.from(txt).forEach(function(c, i){
@@ -45,14 +46,14 @@
     });
     h.classList.add('rvh');
   });
-  var targets = document.querySelectorAll('.rv, .rvh');
+  var targets = document.querySelectorAll('.rvh');
   function show(el){ if (root.classList.contains('ready')) el.classList.add('in'); else pending.push(el); }
   if (reduced || !('IntersectionObserver' in window)) {
     targets.forEach(function(e){ e.classList.add('in'); });
   } else {
     var io = new IntersectionObserver(function(es){
       es.forEach(function(e){ if (e.isIntersecting){ show(e.target); io.unobserve(e.target); } });
-    }, {threshold:.15});
+    }, {threshold:.2});
     targets.forEach(function(e){ io.observe(e); });
     setTimeout(function(){ targets.forEach(function(e){ e.classList.add('in'); }); }, 9000); // failsafe
   }
@@ -71,44 +72,83 @@
     });
   }
 
+  /* ---------- scroll-driven pieces ---------- */
+  var top = document.querySelector('.top');
   var bar = document.querySelector('.progress');
-  var heroImg = document.querySelector('.hero-photo img');
+  var hero = document.querySelector('.hero2');
+  var hp = document.querySelector('.h2-photo');
+  var him = hp && hp.querySelector('img');
+  var hint = document.querySelector('.scrollhint');
+  var hs = document.querySelector('.hs');
+  var rail = hs && hs.querySelector('.rail');
+  var band = document.querySelector('.band');
+  var bandImg = band && band.querySelector('img');
+  var hsTotal = 0;
+
+  function sizeHS(){
+    if (!hs || !rail) return;
+    if (reduced) { hs.classList.add('no-pin'); return; }
+    hsTotal = Math.max(0, rail.scrollWidth - window.innerWidth);
+    hs.style.height = (hsTotal + window.innerHeight) + 'px';
+  }
+
   var ticking = false;
   function update(){
     ticking = false;
-    var y = window.scrollY, vh = window.innerHeight;
+    var y = window.scrollY, vw = window.innerWidth, vh = window.innerHeight;
     var max = document.documentElement.scrollHeight - vh;
     if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
-    if (heroImg && !reduced && y < vh * 1.5) heroImg.style.transform = 'translateY(' + (y * 0.06) + 'px) scale(1.1)';
+
+    // hero: framed photo grows to full screen
+    if (hero && hp) {
+      var range = hero.offsetHeight - vh;
+      var pr = clamp(y / range, 0, 1);
+      var e = pr < .5 ? 2 * pr * pr : 1 - Math.pow(-2 * pr + 2, 2) / 2;
+      var wide = vw > 820;
+      var s0 = wide ? vw * .30 : vw * .12;
+      var s1 = wide ? Math.max(0, (vw - vh * .8) / 2) : 0;
+      var side = s0 + (s1 - s0) * e;
+      hp.style.clipPath = 'inset(' + (vh * .13 * (1 - e)) + 'px ' + side + 'px ' + (vh * .24 * (1 - e)) + 'px ' + side + 'px)';
+      if (him) him.style.transform = 'scale(' + (1.2 - .2 * e) + ')';
+      if (hint) hint.style.opacity = String(clamp(1 - pr * 5, 0, 1));
+      if (top) top.classList.toggle('solid', y > range - 40);
+    }
+
+    // intro sentence
     if (p && words.length) {
-      if (reduced) { words.forEach(function(w){ w.classList.add('on'); }); return; }
-      var r = p.getBoundingClientRect();
-      var prog = (vh * 0.85 - r.top) / (vh * 0.3 + r.height);
-      var n = Math.round(Math.max(0, Math.min(1, prog)) * words.length);
-      words.forEach(function(w, i){ w.classList.toggle('on', i < n); });
+      if (reduced) { words.forEach(function(w){ w.classList.add('on'); }); }
+      else {
+        var r = p.getBoundingClientRect();
+        var prog = (vh * 0.85 - r.top) / (vh * 0.3 + r.height);
+        var n = Math.round(clamp(prog, 0, 1) * words.length);
+        words.forEach(function(w, i){ w.classList.toggle('on', i < n); });
+      }
+    }
+
+    // photos: vertical scroll moves the rail sideways
+    if (hs && rail && !reduced) {
+      var hr = hs.getBoundingClientRect();
+      var hp2 = clamp(-hr.top / Math.max(1, hr.height - vh), 0, 1);
+      rail.style.transform = 'translate3d(' + (-hp2 * hsTotal) + 'px,0,0)';
+    }
+
+    // band: slow parallax
+    if (bandImg && !reduced) {
+      var br = band.getBoundingClientRect();
+      var bp = clamp((vh - br.top) / (vh + br.height), 0, 1);
+      bandImg.style.transform = 'translate3d(0,' + ((0.5 - bp) * br.height * 0.2) + 'px,0)';
     }
   }
   function onScroll(){ if (!ticking){ ticking = true; requestAnimationFrame(update); } }
   addEventListener('scroll', onScroll, {passive:true});
-  addEventListener('resize', onScroll);
-  update();
-
-  /* ---------- drag the photo rail ---------- */
-  var rail = document.querySelector('.rail');
-  if (rail) {
-    var down = false, sx = 0, sl = 0;
-    rail.addEventListener('pointerdown', function(e){
-      if (e.pointerType !== 'mouse') return;
-      down = true; sx = e.clientX; sl = rail.scrollLeft; rail.classList.add('drag');
-    });
-    addEventListener('pointerup', function(){ down = false; rail.classList.remove('drag'); });
-    addEventListener('pointermove', function(e){ if (down) rail.scrollLeft = sl - (e.clientX - sx); });
-    rail.addEventListener('dragstart', function(e){ e.preventDefault(); });
-  }
+  addEventListener('resize', function(){ sizeHS(); onScroll(); });
+  addEventListener('load', function(){ sizeHS(); update(); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function(){ sizeHS(); update(); });
+  sizeHS(); update();
 
   if (!fine) return;
 
-  /* ---------- follower dot + list preview (mouse only) ---------- */
+  /* ---------- mouse only: follower dot + list preview + photo trail ---------- */
   var cur = document.querySelector('.cursor'), peek = document.querySelector('.peek');
   var mx = innerWidth / 2, my = innerHeight / 2, cx = mx, cy = my, px = mx, py = my, moved = false;
   addEventListener('pointermove', function(e){
@@ -132,12 +172,11 @@
     li.addEventListener('mouseleave', function(){ peek.classList.remove('on'); });
   });
 
-  /* ---------- hero: photo trail + tilt ---------- */
-  var hero = document.querySelector('.hero'), trail = document.querySelector('.trail');
+  var stick = document.querySelector('.h2-stick'), trail = document.querySelector('.trail');
   var lx = -999, ly = -999, k = 0;
-  hero.addEventListener('pointermove', function(e){
+  if (stick && trail) stick.addEventListener('pointermove', function(e){
     if (e.pointerType !== 'mouse') return;
-    var r = hero.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+    var r = stick.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
     if (Math.hypot(x - lx, y - ly) < 110) return;
     lx = x; ly = y;
     var im = document.createElement('img');
@@ -150,13 +189,4 @@
     setTimeout(function(){ im.remove(); }, 1400);
     while (trail.children.length > 9) trail.firstChild.remove();
   });
-  var hp = document.querySelector('.hero-photo');
-  if (hp) {
-    hp.addEventListener('pointermove', function(e){
-      if (e.pointerType !== 'mouse') return;
-      var r = hp.getBoundingClientRect(), nx = (e.clientX - r.left) / r.width - .5, ny = (e.clientY - r.top) / r.height - .5;
-      hp.style.transform = 'perspective(900px) rotateX(' + (-ny * 7).toFixed(2) + 'deg) rotateY(' + (nx * 7).toFixed(2) + 'deg)';
-    });
-    hp.addEventListener('pointerleave', function(){ hp.style.transform = ''; });
-  }
 })();
