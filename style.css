@@ -110,6 +110,35 @@ html.js:not(.ready) h1 span{animation:none}
 .w{opacity:.2;transition:opacity .35s}
 .w.on{opacity:1}
 
+/* ---------- education, certificates, awards: pinned, one screen each ---------- */
+.cred{position:relative;height:330vh;background:var(--ink);color:var(--floor);border-top:1px solid #2a2e47}
+.cred-stick{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;display:flex;flex-direction:column;padding:calc(var(--bar) + 26px) var(--pad) calc(28px + var(--safe-b))}
+.cred-head h2{color:#fff;font-weight:600}
+.tabs{display:flex;gap:10px;margin-top:16px}
+.tabs button{position:relative;flex:1;min-height:44px;background:none;border:0;text-align:left;font-size:16px;font-weight:600;color:var(--haze);padding:0 0 10px;transition:color .3s}
+.tabs button::before,.tabs button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:2px}
+.tabs button::before{background:rgba(255,255,255,.18)}
+.tabs button::after{background:var(--tape-lt);transform-origin:0 50%;transform:scaleX(var(--tp,0))}
+.tabs button[aria-current="true"]{color:#fff}
+.panels{position:relative;flex:1;margin-top:8px}
+.panel{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+.panel.on{opacity:1;visibility:visible;transition:opacity .5s}
+.ghost{position:absolute;left:50%;top:46%;z-index:0;white-space:nowrap;font-size:clamp(150px,52vw,440px);font-weight:200;line-height:1;letter-spacing:-.06em;color:transparent;-webkit-text-stroke:1px rgba(142,152,255,.38);transform:translate(-50%,-50%);pointer-events:none;will-change:transform}
+@supports not (-webkit-text-stroke:1px #000){.ghost{color:rgba(142,152,255,.12)}}
+.ptitle{position:relative;z-index:1;font-size:clamp(44px,13vw,104px);font-weight:600;letter-spacing:-.035em;line-height:1.05;color:#fff;opacity:0;transform:translateY(30px);transition:opacity .6s,transform .8s cubic-bezier(.2,.8,.2,1)}
+.items{position:relative;z-index:1;list-style:none;margin-top:22px}
+.items li{padding:16px 0;border-top:1px solid rgba(255,255,255,.16);font-size:clamp(19px,5.2vw,28px);font-weight:300;line-height:1.35;opacity:0;transform:translateY(26px);transition:opacity .6s,transform .8s cubic-bezier(.2,.8,.2,1);transition-delay:calc(120ms + var(--k) * 120ms)}
+.items li:last-child{border-bottom:1px solid rgba(255,255,255,.16)}
+.items em{font-style:normal;font-weight:600;color:var(--tape-lt)}
+.items small{display:block;margin-top:2px;font-size:15px;color:var(--haze)}
+.panel.on .ptitle,.panel.on .items li{opacity:1;transform:none}
+/* no script or reduced motion: show all three, stacked */
+html.no-js .cred,.cred.static{height:auto}
+html.no-js .cred-stick,.cred.static .cred-stick{position:static;height:auto;padding-bottom:64px}
+html.no-js .tabs,.cred.static .tabs{display:none}
+html.no-js .panel,.cred.static .panel{position:relative;opacity:1;visibility:visible;margin-top:44px;overflow:hidden}
+html.no-js .ptitle,html.no-js .items li,.cred.static .ptitle,.cred.static .items li{opacity:1;transform:none}
+
 /* ---------- section headings ---------- */
 .sec{padding-top:64px;background:var(--floor);position:relative}
 .sec-head{padding:0 var(--pad) 22px}
@@ -237,6 +266,10 @@ blockquote cite{display:block;margin-top:8px;color:var(--dim);font-style:normal;
   .kin{padding:72px 0 84px}
   .xp-photo{clip-path:inset(14vh 32vw 30vh 32vw)}
   .sec{padding-top:104px}
+  .cred-stick{padding-top:calc(var(--bar) + 40px)}
+  .tabs{max-width:640px}
+  .panel{display:grid;grid-template-columns:4fr 8fr;align-items:center;gap:var(--pad)}
+  .items{margin-top:0}
   .card{grid-template-columns:3fr 9fr;gap:var(--pad);padding:36px var(--pad) 40px;top:calc(var(--bar) + var(--i) * 14px)}
   .list li{grid-template-columns:11em 1fr;gap:20px}
   .card .list li{padding:12px 0}

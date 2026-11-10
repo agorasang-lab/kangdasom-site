@@ -77,7 +77,7 @@
   }
 
   /* ---------- headings rise letter by letter ---------- */
-  $$('.sec-head h2, .block .head h2, .rail-head h2, .contact h2').forEach(function(h){
+  $$('.sec-head h2, .block .head h2, .rail-head h2, .contact h2, .cred-head h2').forEach(function(h){
     if (reduced) return;
     var txt = h.textContent; h.setAttribute('aria-label', txt); h.textContent = '';
     Array.from(txt).forEach(function(c, i){
@@ -121,6 +121,15 @@
   var cards = $$('.stack .card');
   var hs = $('.hs'), rail = hs && $('.rail', hs), hsTotal = 0;
   var band = $('.band'), bandImg = band && $('img', band);
+  var cred = $('.cred'), cPanels = cred ? $$('.panel', cred) : [], cTabs = cred ? $$('.tabs button', cred) : [], cSeg = 0;
+  if (cred && reduced) cred.classList.add('static');
+  cTabs.forEach(function(t, k){
+    t.addEventListener('click', function(){
+      var top0 = cred.getBoundingClientRect().top + window.scrollY;
+      var rng = cred.offsetHeight - window.innerHeight;
+      window.scrollTo({top: top0 + rng * (k / cPanels.length + 0.04) + 1, behavior: reduced ? 'auto' : 'smooth'});
+    });
+  });
 
   function sizeHS(){
     if (!hs || !rail) return;
@@ -174,6 +183,22 @@
         var n = reduced ? words.length : Math.round(clamp((xpr - .35) / .55, 0, 1) * words.length);
         words.forEach(function(w, i){ w.classList.toggle('on', i < n); });
       }
+    }
+
+    // education / certificates / awards: one screen each while pinned
+    if (cred && !reduced && cPanels.length) {
+      var crr = cred.getBoundingClientRect();
+      var crng = cred.offsetHeight - vh;
+      var cp0 = clamp(-crr.top / Math.max(1, crng), 0, 0.9999);
+      var seg = Math.floor(cp0 * cPanels.length), local = cp0 * cPanels.length - seg;
+      if (seg !== cSeg) {
+        cPanels.forEach(function(pn, k){ pn.classList.toggle('on', k === seg); });
+        cTabs.forEach(function(t, k){ t.setAttribute('aria-current', String(k === seg)); });
+        cSeg = seg;
+      }
+      cTabs.forEach(function(t, k){ t.style.setProperty('--tp', k < seg ? '1' : k === seg ? local.toFixed(3) : '0'); });
+      var gh = $('.ghost', cPanels[seg]);
+      if (gh) gh.style.transform = 'translate(calc(-50% + ' + ((0.5 - local) * 18).toFixed(2) + 'vw),-50%)';
     }
 
     // stacked cards: the one being covered shrinks and dims
