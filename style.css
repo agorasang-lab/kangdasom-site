@@ -29,16 +29,14 @@ html.menu-open{overflow:hidden}
 @keyframes loaderFail{to{visibility:hidden}}
 
 /* ---------- top bar ---------- */
-.top{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--bar);display:flex;justify-content:space-between;align-items:center;padding:0 var(--pad);color:#fff;background:transparent;border-bottom:1px solid transparent;transition:background .3s,color .3s,border-color .3s}
-.top.solid{background:rgba(232,234,238,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);color:var(--ink);border-bottom-color:var(--haze)}
-html.menu-open .top{background:transparent;color:#fff;border-bottom-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+/* default = solid bar (works without script); script adds .over while the bar sits on the dark hero */
+.top{position:fixed;top:0;left:0;right:0;z-index:50;height:var(--bar);display:flex;justify-content:space-between;align-items:center;padding:0 var(--pad);color:var(--ink);background:rgba(232,234,238,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid var(--haze);transition:background .3s,color .3s,border-color .3s}
+.top.over,html.menu-open .top{background:transparent;color:#fff;border-bottom-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
 .mark{display:flex;align-items:center;gap:9px;font-weight:600;text-decoration:none;font-size:18px;min-height:44px}
-.logo .arch{stroke:var(--tape-lt)}
-.logo .head{fill:var(--tape-lt)}
-.top.solid .logo .arch{stroke:var(--tape)}
-.top.solid .logo .head{fill:var(--tape)}
-html.menu-open .logo .arch{stroke:var(--tape-lt)}
-html.menu-open .logo .head{fill:var(--tape-lt)}
+.logo .arch{stroke:var(--tape)}
+.logo .head{fill:var(--tape)}
+.top.over .logo .arch,html.menu-open .logo .arch{stroke:var(--tape-lt)}
+.top.over .logo .head,html.menu-open .logo .head{fill:var(--tape-lt)}
 .dnav{display:none}
 .menu-btn{display:flex;align-items:center;gap:10px;background:none;border:0;min-height:44px;padding:0 0 0 12px;font-size:15px}
 .mb-icon{position:relative;width:22px;height:12px}

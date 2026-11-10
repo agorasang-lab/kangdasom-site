@@ -137,7 +137,7 @@
     if (bar) bar.style.transform = 'scaleX(' + (max > 0 ? y / max : 0) + ')';
 
     var heroH = hero ? hero.offsetHeight : vh;
-    if (top && !root.classList.contains('menu-open')) top.classList.toggle('solid', y > heroH - 60);
+    if (top) top.classList.toggle('over', y <= heroH - 60);
 
     // hero drifts and fades as you leave it
     if (!reduced && y < heroH) {
