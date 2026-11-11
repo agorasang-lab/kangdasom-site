@@ -256,6 +256,7 @@ blockquote cite{display:block;margin-top:8px;color:var(--dim);font-style:normal;
 .btn{display:flex;align-items:center;justify-content:center;min-height:52px;padding:12px 20px;border:1px solid rgba(255,255,255,.4);background:none;color:#fff;text-decoration:none;font-weight:600;font-size:16px}
 .btn.primary{background:var(--tape);border-color:var(--tape)}
 .btn:active{transform:scale(.98)}
+.cta-hint{margin-top:12px;color:var(--haze);font-size:14px}
 .copy-status{min-height:1.6em;margin-top:10px;color:var(--tape-lt);font-size:14px}
 .contact ul{list-style:none;margin-top:28px;max-width:640px}
 .contact li{display:grid;grid-template-columns:6.5em 1fr;padding:14px 0;border-bottom:1px solid #353a55}
