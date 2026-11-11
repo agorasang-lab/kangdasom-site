@@ -2,7 +2,7 @@
   var root = document.documentElement;
   var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
   var fine = matchMedia('(pointer: fine)').matches && !reduced;
-  var PHOTOS = ['images/hero2.jpg','images/stage2.jpg','images/hero3.jpg','images/photo3.jpg','images/hero4.jpg','images/portrait.jpg','images/photo1.jpg'];
+  var PHOTOS = ['images/hero2.jpg','images/stage2.jpg','images/hero3.jpg','images/sea1.jpg','images/hero4.jpg','images/portrait.jpg','images/photo1.jpg'];
   function clamp(v, a, b){ return Math.max(a, Math.min(b, v)); }
   function $(s, c){ return (c || document).querySelector(s); }
   function $$(s, c){ return Array.prototype.slice.call((c || document).querySelectorAll(s)); }
