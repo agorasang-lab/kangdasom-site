@@ -318,6 +318,9 @@ blockquote cite{display:block;margin-top:8px;color:var(--dim);font-style:normal;
   .reels .reel:hover{flex:3}
   .reel-ui{display:none}
   .band{height:78vh}
+  .band::after{background:linear-gradient(to bottom,rgba(21,24,43,.78),rgba(21,24,43,.05) 55%)}
+  .band-copy{top:clamp(40px,9vh,96px);bottom:auto}
+  .band-title{font-size:clamp(40px,4.6vw,72px)}
   .cta{flex-direction:row;max-width:none}
   .btn{padding:12px 28px}
   .contact{padding:120px var(--pad) 40px}
